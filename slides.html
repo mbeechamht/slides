@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Architecture of Scale</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #0d0d1a; color: white; }
+  .slide { width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden; page-break-after: always; break-after: page; display: flex; flex-direction: column; justify-content: flex-start; padding: 56px 64px 48px 64px; }
+  .bg-dark { background: radial-gradient(ellipse at 70% 60%, #3a1a6e 0%, #1a1040 40%, #0a0a1f 100%); }
+  .bg-dark2 { background: radial-gradient(ellipse at 30% 70%, #2a0a5e 0%, #130d35 40%, #080818 100%); }
+  .slide-title { font-size: 2.4em; font-weight: 700; line-height: 1.15; margin-bottom: 10px; }
+  .slide-subtitle { font-size: 1em; color: rgba(255,255,255,0.75); margin-bottom: 32px; }
+  /* Slide 1 */
+  .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .stake-item { padding: 18px 28px 18px 0; border-top: 2px solid rgba(255,255,255,0.25); }
+  .stake-item.col-span-2 { grid-column: span 2; }
+  .stake-num { font-size: 0.82em; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+  .stake-title { font-size: 1.1em; font-weight: 700; margin-bottom: 6px; }
+  .stake-desc { font-size: 0.8em; color: rgba(255,255,255,0.7); line-height: 1.5; }
+  /* Slide 2 */
+  .questions-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, auto); gap: 14px; }
+  .question-card { background: rgba(80,60,160,0.35); border: 1px solid rgba(120,100,200,0.4); border-radius: 10px; padding: 20px 22px; }
+  .question-card.span2 { grid-column: span 2; }
+  .question-text { font-size: 0.92em; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+  .question-sub { font-size: 0.76em; color: rgba(255,255,255,0.65); line-height: 1.4; }
+  /* Slide 3 */
+  .gaps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .gap-card { background: rgba(60,50,140,0.4); border: 1px solid rgba(100,80,200,0.35); border-radius: 10px; padding: 18px 20px; }
+  .gap-num-title { font-size: 0.9em; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+  .gap-desc { font-size: 0.76em; color: rgba(255,255,255,0.65); line-height: 1.45; }
+  /* Slide 4 */
+  .triage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex: 1; }
+  .triage-box { border-radius: 12px; padding: 26px 30px; }
+  .triage-fix { background: rgba(70,55,170,0.5); border: 1px solid rgba(130,110,220,0.4); }
+  .triage-box-title { font-size: 1.15em; font-weight: 700; margin-bottom: 4px; }
+  .triage-box-sub { font-size: 0.8em; color: rgba(255,255,255,0.6); margin-bottom: 14px; }
+  .triage-list { list-style: disc; padding-left: 20px; }
+  .triage-list li { font-size: 0.82em; color: rgba(255,255,255,0.88); margin-bottom: 6px; line-height: 1.4; }
+  /* Slide 5 */
+  .spectrum-table { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); }
+  .spectrum-table th { background: rgba(60,50,130,0.6); padding: 11px 18px; font-size: 0.85em; font-weight: 700; text-align: left; }
+  .spectrum-table th:first-child { width: 15%; }
+  .spectrum-table th:nth-child(2) { width: 37%; }
+  .spectrum-table td { padding: 10px 18px; font-size: 0.78em; color: rgba(255,255,255,0.82); border-top: 1px solid rgba(255,255,255,0.08); vertical-align: top; line-height: 1.45; }
+  .spectrum-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+  .spectrum-table td:first-child { font-weight: 700; color: white; }
+  /* Nav */
+  .controls { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; align-items: center; background: rgba(0,0,0,0.65); padding: 10px 20px; border-radius: 30px; backdrop-filter: blur(8px); z-index: 100; }
+  .controls button { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 18px; border-radius: 20px; cursor: pointer; font-size: 13px; }
+  .controls button:hover { background: rgba(255,255,255,0.25); }
+  .controls button:disabled { opacity: 0.3; cursor: default; }
+  .slide-indicator { color: rgba(255,255,255,0.55); font-size: 13px; min-width: 50px; text-align: center; }
+  body.slideshow .slide { display: none; min-height: 100vh; aspect-ratio: unset; }
+  body.slideshow .slide.active { display: flex; }
+  body.slideshow { overflow: hidden; }
+  @media print { .controls { display: none; } .slide { display: flex !important; min-height: 0; aspect-ratio: 16/9; } }
+</style>
+</head>
+<body class="slideshow">
+
+<div class="slide bg-dark active">
+  <div class="slide-title">Table stakes: the gaps that end conversations immediately</div>
+  <div class="slide-subtitle">If you don't have these, the evaluation stops before it starts.</div>
+  <div class="stakes-grid">
+    <div class="stake-item"><div class="stake-num">01</div><div class="stake-title">No environment separation</div><div class="stake-desc">Production, staging, and dev run in the same place; buyers won't touch it.</div></div>
+    <div class="stake-item"><div class="stake-num">02</div><div class="stake-title">No audit trail</div><div class="stake-desc">Every action, every access, every model decision needs to be logged and retrievable.</div></div>
+    <div class="stake-item"><div class="stake-num">03</div><div class="stake-title">Shared credentials &amp; API keys</div><div class="stake-desc">One set of credentials passed around Slack. No secrets management, no key rotation, no individual access.</div></div>
+    <div class="stake-item col-span-2"><div class="stake-num">04</div><div class="stake-title">Missing role-based access</div><div class="stake-desc">No way to limit what different users can see or do; fails every security review.</div></div>
+    <div class="stake-item"><div class="stake-num">05</div><div class="stake-title">No versioning or rollback (app + model)</div><div class="stake-desc">Can't revert when something goes wrong. Can't trace which model version produced which output.</div></div>
+  </div>
+</div>
+
+<div class="slide bg-dark2">
+  <div class="slide-title">The questions that come up in every Series A+ diligence</div>
+  <div class="slide-subtitle">Technical diligence isn't about your tech stack. It's about whether your decisions signal a company that can scale, or a science project.</div>
+  <div class="questions-grid">
+    <div class="question-card"><div class="question-text">"What breaks at 10x, 100x your current load?"</div><div class="question-sub">Tests whether you understand your own bottlenecks.</div></div>
+    <div class="question-card"><div class="question-text">"How long to onboard a new enterprise customer?"</div><div class="question-sub">Reveals operational maturity and multi-tenancy design.</div></div>
+    <div class="question-card"><div class="question-text">"What's your bus factor on critical systems?"</div><div class="question-sub">Team depth and documentation practices.</div></div>
+    <div class="question-card"><div class="question-text">"Walk me through your last incident."</div><div class="question-sub">Culture of accountability and operational readiness.</div></div>
+    <div class="question-card span2"><div class="question-text">"How was your model validated, and on whose data?"</div><div class="question-sub">Bias risk, generalizability, and whether clinical performance holds across populations.</div></div>
+  </div>
+</div>
+
+<div class="slide bg-dark">
+  <div class="slide-title">The gaps that kill deals after the pilot succeeds</div>
+  <div class="slide-subtitle">These are the ones founders don't see coming. Each showed up in a real deal that stalled or died.</div>
+  <div class="gaps-grid">
+    <div class="gap-card"><div class="gap-num-title">06. No data deletion or retention mechanism.</div><div class="gap-desc">Legal asks "can you purge a patient's data on request?" and your engineer says "we'd have to write a script."</div></div>
+    <div class="gap-card"><div class="gap-num-title">07. Hard-coded integrations</div><div class="gap-desc">Built for one EHR or one data format; breaks when the next buyer uses something different.</div></div>
+    <div class="gap-card"><div class="gap-num-title">08. Manual deployments to production.</div><div class="gap-desc">No CI/CD pipeline, someone SSHs into a server to push changes. One bad deploy with no rollback path and you're down in production.</div></div>
+    <div class="gap-card"><div class="gap-num-title">09. No tenant-level configuration</div><div class="gap-desc">Changing a threshold or workflow rule requires a full deploy instead of a config publish. Engineering becomes a bottleneck for every customer request.</div></div>
+    <div class="gap-card"><div class="gap-num-title">10. Monitoring exists, nobody watches it</div><div class="gap-desc">"What happens when your system goes down at 2am?" Honest answer: someone notices in the morning.</div></div>
+    <div class="gap-card"><div class="gap-num-title">11. No model transparency documentation</div><div class="gap-desc">The CMO asks "why did it flag this patient, and was it tested on a population like ours?" You hand them a research paper instead of a model card with explainability methods, training data provenance, and bias testing.</div></div>
+  </div>
+</div>
+
+<div class="slide bg-dark2">
+  <div class="slide-title">Triage: what to fix now vs. what can wait</div>
+  <div class="slide-subtitle">You have 12 months of runway and 10 engineers. You can't rebuild everything. Prioritize.</div>
+  <div class="triage-grid">
+    <div class="triage-box triage-fix">
+      <div class="triage-box-title">Fix this quarter</div>
+      <div class="triage-box-sub">Expensive to retrofit. Will block deals.</div>
+      <ul class="triage-list">
+        <li>Audit trail</li><li>Role-based access</li><li>Environment separation</li>
+        <li>Data deletion/retention policy</li><li>Credential management</li>
+        <li>Data residency documentation (where data lives, who can access it, can it stay in-region)</li>
+        <li>Versioning + rollback</li><li>Manual deployments</li>
+        <li>Model transparency: model card, training data provenance</li>
+      </ul>
+    </div>
+    <div class="triage-box">
+      <div class="triage-box-title">Plan for future</div>
+      <div class="triage-box-sub">Important, but can be phased in.</div>
+      <ul class="triage-list">
+        <li>Integration abstraction layer</li><li>Tenant-level configuration</li>
+        <li>Monitoring + alerting + on-call</li><li>Model transparency: bias testing</li>
+        <li>SOC 2 Type II</li><li>Disaster recovery testing</li>
+        <li>API sandbox</li><li>SSO / SAML</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="slide bg-dark">
+  <div class="slide-title">Where are you on this spectrum?</div>
+  <div class="slide-subtitle">Most founders are on the left. Enterprise buyers expect the right.</div>
+  <table class="spectrum-table">
+    <thead><tr><th>Area</th><th>Demo-Ready</th><th>Enterprise-Ready</th></tr></thead>
+    <tbody>
+      <tr><td>Auth</td><td>Basic login, single tenant</td><td>SSO/SAML, RBAC, MFA, audit logs</td></tr>
+      <tr><td>Data</td><td>Single database, manual backups</td><td>Multi-tenant isolation, automated DR</td></tr>
+      <tr><td>Integration</td><td>Swivel chair, CSV import, basic API</td><td>HL7/FHIR, webhooks, middleware-ready</td></tr>
+      <tr><td>Monitoring</td><td>Error logs in console</td><td>APM, alerting, SLA dashboards</td></tr>
+      <tr><td>Compliance</td><td>Privacy policy on website</td><td>SOC 2 Type II, HIPAA BAA, pen tests</td></tr>
+      <tr><td>Data Residency</td><td>"It's in AWS"</td><td>Region-specific hosting, documented data flows, contractual guarantees</td></tr>
+      <tr><td>AI Governance</td><td>AI accuracy metrics in a pitch deck</td><td>Model card, bias testing, explainability method, predetermined change control</td></tr>
+      <tr><td>AI Validation</td><td>Tested on our dataset</td><td>Performance by demographic subgroup, validated on populations that match buyer's patient mix, documented drift monitoring</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="controls">
+  <button id="prevBtn" onclick="go(-1)" disabled>← Prev</button>
+  <span class="slide-indicator" id="ctr">1 / 5</span>
+  <button id="nextBtn" onclick="go(1)">Next →</button>
+  <button onclick="doPrint()" style="background:rgba(100,80,200,0.45); margin-left:6px;">🖨 Save as PDF</button>
+</div>
+<script>
+  let cur = 0;
+  const slides = document.querySelectorAll('.slide');
+  function go(d) {
+    slides[cur].classList.remove('active');
+    cur = Math.max(0, Math.min(slides.length-1, cur+d));
+    slides[cur].classList.add('active');
+    document.getElementById('ctr').textContent = `${cur+1} / ${slides.length}`;
+    document.getElementById('prevBtn').disabled = cur===0;
+    document.getElementById('nextBtn').disabled = cur===slides.length-1;
+  }
+  function doPrint() {
+    document.body.classList.remove('slideshow');
+    window.print();
+    setTimeout(()=>document.body.classList.add('slideshow'), 500);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+    if (e.key==='ArrowLeft'||e.key==='ArrowUp') go(-1);
+  });
+</script>
+</body>
+</html>
