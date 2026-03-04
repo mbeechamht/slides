@@ -59,7 +59,44 @@
   body.slideshow .slide { display: none; min-height: 100vh; aspect-ratio: unset; }
   body.slideshow .slide.active { display: flex; }
   body.slideshow { overflow: hidden; }
-  @media print { .controls { display: none; } .slide { display: flex !important; min-height: 0; aspect-ratio: 16/9; } }
+  @media print {
+    .controls { display: none; }
+    .slide { display: flex !important; min-height: 0; aspect-ratio: 16/9; }
+    body { background: white; }
+    .slide, .bg-dark, .bg-dark2 { background: white !important; color: #0d1a4a !important; }
+    .slide-title { color: #0d1a4a !important; }
+    .slide-subtitle { color: #3a4a7a !important; }
+    /* Spectrum table */
+    .spectrum-table { border: 1.5px solid #0d1a4a !important; }
+    .spectrum-table th { background: #0d1a4a !important; color: white !important; }
+    .spectrum-table td { color: #1a2a5a !important; border-top: 1px solid #c0c8e0 !important; }
+    .spectrum-table td:first-child { color: #0d1a4a !important; }
+    .spectrum-table td:nth-child(2) { color: #3a4a7a !important; }
+    .spectrum-table tr:nth-child(even) td { background: #f0f3fa !important; }
+    /* Cards: stakes, gaps */
+    .stake-card, .gap-card {
+      background: #f0f3fa !important;
+      border: 1.5px solid #0d1a4a !important;
+    }
+    .stake-num { color: #5a6a9a !important; }
+    .stake-title, .gap-num-title { color: #0d1a4a !important; }
+    .stake-desc, .gap-desc { color: #2a3a6a !important; }
+    /* Question cards */
+    .question-card {
+      background: #f0f3fa !important;
+      border: 1.5px solid #0d1a4a !important;
+    }
+    .question-text { color: #0d1a4a !important; }
+    .question-sub { color: #2a3a6a !important; }
+    /* Triage */
+    .triage-fix {
+      background: #e8ecf8 !important;
+      border: 1.5px solid #0d1a4a !important;
+    }
+    .triage-box-title { color: #0d1a4a !important; }
+    .triage-box-sub { color: #3a4a7a !important; }
+    .triage-list li { color: #1a2a5a !important; }
+  }
 </style>
 </head>
 <body class="slideshow">
