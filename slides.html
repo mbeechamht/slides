@@ -11,40 +11,38 @@
   .bg-dark2 { background: radial-gradient(ellipse at 30% 70%, #2a0a5e 0%, #130d35 40%, #080818 100%); }
   .slide-title { font-size: 2.4em; font-weight: 700; line-height: 1.15; margin-bottom: 10px; }
   .slide-subtitle { font-size: 1em; color: rgba(255,255,255,0.75); margin-bottom: 32px; }
-  /* Slide 1 */
 
-  .spectrum-table { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); }
-  .spectrum-table th { background: rgba(60,50,130,0.6); padding: 11px 18px; font-size: 0.85em; font-weight: 700; text-align: left; }
-  .spectrum-table th:first-child { width: 15%; }
-  .spectrum-table th:nth-child(2) { width: 37%; }
-  .spectrum-table td { padding: 10px 18px; font-size: 0.78em; color: rgba(255,255,255,0.82); border-top: 1px solid rgba(255,255,255,0.08); vertical-align: top; line-height: 1.45; }
+  /* Slide 1 — Spectrum Table: tighter, auto-fit columns */
+  .spectrum-table { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); table-layout: auto; }
+  .spectrum-table th { background: rgba(60,50,130,0.6); padding: 11px 16px; font-size: 0.85em; font-weight: 700; text-align: left; white-space: nowrap; }
+  .spectrum-table td { padding: 9px 16px; font-size: 0.78em; color: rgba(255,255,255,0.82); border-top: 1px solid rgba(255,255,255,0.08); vertical-align: top; line-height: 1.4; }
   .spectrum-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
-  .spectrum-table td:first-child { font-weight: 700; color: white; }
+  .spectrum-table td:first-child { font-weight: 700; color: white; white-space: nowrap; width: 1%; padding-right: 20px; }
+  .spectrum-table td:nth-child(2) { width: 1%; white-space: nowrap; padding-right: 24px; color: rgba(255,255,255,0.6); }
+  .spectrum-table td:nth-child(3) { width: auto; }
 
-  /* Slide 2 */
+  /* Slide 2 — Stakes as cards (matching slides 3 & 4) */
+  .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .stake-card { background: rgba(60,50,140,0.4); border: 1px solid rgba(100,80,200,0.35); border-radius: 10px; padding: 18px 20px; }
+  .stake-num { font-size: 0.82em; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+  .stake-title { font-size: 0.9em; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+  .stake-desc { font-size: 0.76em; color: rgba(255,255,255,0.65); line-height: 1.45; }
 
-  .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
-  .stake-item { padding: 18px 28px 18px 0; border-top: 2px solid rgba(255,255,255,0.25); }
-  .stake-item.col-span-2 { grid-column: span 2; }
-  .stake-num { font-size: 0.82em; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
-  .stake-title { font-size: 1.1em; font-weight: 700; margin-bottom: 6px; }
-  .stake-desc { font-size: 0.8em; color: rgba(255,255,255,0.7); line-height: 1.5; }
-
- /* Slide 3 */
-    .questions-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, auto); gap: 14px; }
+  /* Slide 3 — Questions */
+  .questions-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, auto); gap: 14px; }
   .question-card { background: rgba(80,60,160,0.35); border: 1px solid rgba(120,100,200,0.4); border-radius: 10px; padding: 20px 22px; }
   .question-card.span2 { grid-column: span 2; }
   .question-text { font-size: 0.92em; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
   .question-sub { font-size: 0.76em; color: rgba(255,255,255,0.65); line-height: 1.4; }
- 
- /* Slide 4 */
-.gaps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+  /* Slide 4 — Gaps */
+  .gaps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .gap-card { background: rgba(60,50,140,0.4); border: 1px solid rgba(100,80,200,0.35); border-radius: 10px; padding: 18px 20px; }
   .gap-num-title { font-size: 0.9em; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
   .gap-desc { font-size: 0.76em; color: rgba(255,255,255,0.65); line-height: 1.45; }
 
- /* Slide 5 */
-   .triage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex: 1; }
+  /* Slide 5 — Triage */
+  .triage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex: 1; }
   .triage-box { border-radius: 12px; padding: 26px 30px; }
   .triage-fix { background: rgba(70,55,170,0.5); border: 1px solid rgba(130,110,220,0.4); }
   .triage-box-title { font-size: 1.15em; font-weight: 700; margin-bottom: 4px; }
@@ -66,7 +64,8 @@
 </head>
 <body class="slideshow">
 
-<div class="slide bg-dark">
+<!-- SLIDE 1: Spectrum Table -->
+<div class="slide bg-dark active">
   <div class="slide-title">Where are you on this spectrum?</div>
   <div class="slide-subtitle">Most founders are on the left. Enterprise buyers expect the right.</div>
   <table class="spectrum-table">
@@ -83,32 +82,21 @@
     </tbody>
   </table>
 </div>
- 
-<div class="slide bg-dark active">
+
+<!-- SLIDE 2: Table Stakes — now as cards -->
+<div class="slide bg-dark">
   <div class="slide-title">Table stakes: the gaps that end conversations immediately</div>
   <div class="slide-subtitle">If you don't have these, the evaluation stops before it starts.</div>
   <div class="stakes-grid">
-    <div class="stake-item"><div class="stake-num">01</div><div class="stake-title">No environment separation</div><div class="stake-desc">Production, staging, and dev run in the same place; buyers won't touch it.</div></div>
-    <div class="stake-item"><div class="stake-num">02</div><div class="stake-title">No audit trail</div><div class="stake-desc">Every action, every access, every model decision needs to be logged and retrievable.</div></div>
-    <div class="stake-item"><div class="stake-num">03</div><div class="stake-title">Shared credentials &amp; API keys</div><div class="stake-desc">One set of credentials passed around Slack. No secrets management, no key rotation, no individual access.</div></div>
-    <div class="stake-item col-span-2"><div class="stake-num">04</div><div class="stake-title">Missing role-based access</div><div class="stake-desc">No way to limit what different users can see or do; fails every security review.</div></div>
-    <div class="stake-item"><div class="stake-num">05</div><div class="stake-title">No versioning or rollback (app + model)</div><div class="stake-desc">Can't revert when something goes wrong. Can't trace which model version produced which output.</div></div>
+    <div class="stake-card"><div class="stake-num">01</div><div class="stake-title">No environment separation</div><div class="stake-desc">Production, staging, and dev run in the same place; buyers won't touch it.</div></div>
+    <div class="stake-card"><div class="stake-num">02</div><div class="stake-title">No audit trail</div><div class="stake-desc">Every action, every access, every model decision needs to be logged and retrievable.</div></div>
+    <div class="stake-card"><div class="stake-num">03</div><div class="stake-title">Shared credentials &amp; API keys</div><div class="stake-desc">One set of credentials passed around Slack. No secrets management, no key rotation, no individual access.</div></div>
+    <div class="stake-card"><div class="stake-num">04</div><div class="stake-title">Missing role-based access</div><div class="stake-desc">No way to limit what different users can see or do; fails every security review.</div></div>
+    <div class="stake-card"><div class="stake-num">05</div><div class="stake-title">No versioning or rollback (app + model)</div><div class="stake-desc">Can't revert when something goes wrong. Can't trace which model version produced which output.</div></div>
   </div>
 </div>
 
-<div class="slide bg-dark">
-  <div class="slide-title">The gaps that kill deals after the pilot succeeds</div>
-  <div class="slide-subtitle">These are the ones founders don't see coming. Each showed up in a real deal that stalled or died.</div>
-  <div class="gaps-grid">
-    <div class="gap-card"><div class="gap-num-title">06. No data deletion or retention mechanism.</div><div class="gap-desc">Legal asks "can you purge a patient's data on request?" and your engineer says "we'd have to write a script."</div></div>
-    <div class="gap-card"><div class="gap-num-title">07. Hard-coded integrations</div><div class="gap-desc">Built for one EHR or one data format; breaks when the next buyer uses something different.</div></div>
-    <div class="gap-card"><div class="gap-num-title">08. Manual deployments to production.</div><div class="gap-desc">No CI/CD pipeline, someone SSHs into a server to push changes. One bad deploy with no rollback path and you're down in production.</div></div>
-    <div class="gap-card"><div class="gap-num-title">09. No tenant-level configuration</div><div class="gap-desc">Changing a threshold or workflow rule requires a full deploy instead of a config publish. Engineering becomes a bottleneck for every customer request.</div></div>
-    <div class="gap-card"><div class="gap-num-title">10. Monitoring exists, nobody watches it</div><div class="gap-desc">"What happens when your system goes down at 2am?" Honest answer: someone notices in the morning.</div></div>
-    <div class="gap-card"><div class="gap-num-title">11. No model transparency documentation</div><div class="gap-desc">The CMO asks "why did it flag this patient, and was it tested on a population like ours?" You hand them a research paper instead of a model card with explainability methods, training data provenance, and bias testing.</div></div>
-  </div>
-</div>
- 
+<!-- SLIDE 3: Series A Questions -->
 <div class="slide bg-dark2">
   <div class="slide-title">The questions that come up in every Series A+ diligence</div>
   <div class="slide-subtitle">Technical diligence isn't about your tech stack. It's about whether your decisions signal a company that can scale, or a science project.</div>
@@ -121,8 +109,21 @@
   </div>
 </div>
 
+<!-- SLIDE 4: Post-Pilot Gaps -->
+<div class="slide bg-dark">
+  <div class="slide-title">The gaps that kill deals after the pilot succeeds</div>
+  <div class="slide-subtitle">These are the ones founders don't see coming. Each showed up in a real deal that stalled or died.</div>
+  <div class="gaps-grid">
+    <div class="gap-card"><div class="gap-num-title">06. No data deletion or retention mechanism.</div><div class="gap-desc">Legal asks "can you purge a patient's data on request?" and your engineer says "we'd have to write a script."</div></div>
+    <div class="gap-card"><div class="gap-num-title">07. Hard-coded integrations</div><div class="gap-desc">Built for one EHR or one data format; breaks when the next buyer uses something different.</div></div>
+    <div class="gap-card"><div class="gap-num-title">08. Manual deployments to production.</div><div class="gap-desc">No CI/CD pipeline, someone SSHs into a server to push changes. One bad deploy with no rollback path and you're down in production.</div></div>
+    <div class="gap-card"><div class="gap-num-title">09. No tenant-level configuration</div><div class="gap-desc">Changing a threshold or workflow rule requires a full deploy instead of a config publish. Engineering becomes a bottleneck for every customer request.</div></div>
+    <div class="gap-card"><div class="gap-num-title">10. Monitoring exists, nobody watches it</div><div class="gap-desc">"What happens when your system goes down at 2am?" Honest answer: someone notices in the morning.</div></div>
+    <div class="gap-card"><div class="gap-num-title">11. No model transparency documentation</div><div class="gap-desc">The CMO asks "why did it flag this patient, and was it tested on a population like ours?" You hand them a research paper instead of a model card with explainability methods, training data provenance, and bias testing.</div></div>
+  </div>
+</div>
 
-
+<!-- SLIDE 5: Triage -->
 <div class="slide bg-dark2">
   <div class="slide-title">Triage: what to fix now vs. what can wait</div>
   <div class="slide-subtitle">You have 12 months of runway and 10 engineers. You can't rebuild everything. Prioritize.</div>
@@ -150,8 +151,6 @@
     </div>
   </div>
 </div>
-
-
 
 <div class="controls">
   <button id="prevBtn" onclick="go(-1)" disabled>← Prev</button>
